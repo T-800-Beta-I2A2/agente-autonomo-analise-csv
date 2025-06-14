@@ -1,0 +1,106 @@
+[project]
+name = "I2A2_Agente_Autonomo_Analise_CSV"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests (>=2.32.3,<3.0.0)",
+    "faker (>=37.1.0,<38.0.0)",
+    "python-dotenv (>=1.1.0,<2.0.0)",
+    "pytz (>=2025.2,<2026.0)",
+    "psycopg (>=3.2.6,<4.0.0)",
+    "taskipy>=1.14.1",    
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "ruff>=0.11.13",
+]
+
+
+#######################################################
+# LINTERS - RUFF | Isort | Black
+#######################################################
+[tool.ruff]
+line-length = 120
+lint.select = ["E", "F", "I"]
+# select = ["A", "B", "C", "D", "E", "F", "I", "N", "PL", "RUF", "S", "T", "W"]
+lint.fixable = ["ALL"]
+lint.ignore = [
+    "D203",
+    "D213",
+    "T201",
+    "PLE1205",
+    "F401",    # Remove unused import
+    "F403",
+    "F405",
+    "E501",   # Line too long
+]
+lint.per-file-ignores = {}
+# Same as Black.
+
+# Allow unused variables when underscore-prefixed.
+lint.dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+exclude = [".venv/*", "build", "dist", "node_modules"]
+
+
+[tool.black]
+line-length = 120
+extend-exclude = '''
+.temp-*
+| venv
+| .venv
+'''
+
+#######################################################
+# Pytest & Coverage
+#######################################################
+[tool.pytest.ini_options]
+addopts = "-s -p no:warnings"
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "[pytest][%(asctime)s][%(levelname)s][%(module)s][%(funcName)s] %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+log_level = "INFO"
+testpaths = [
+    "tests",
+]
+
+[tool.coverage.run]
+branch = true
+
+
+[tool.coverage.report]
+ignore_errors = true
+exclude_lines = [
+    "if self.debug:",
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:"
+]
+omit = [
+    "tests/*",
+]
+
+[tool.coverage.html]
+directory = "./temp/coverage_report"
+
+
+#######################################################
+# TASKIPY
+#######################################################
+[tool.taskipy.tasks]
+black_lint = { cmd = "echo '- Black' && black .", help = "apply the black linter" }
+ruff_lint = { cmd = "echo '- Ruff' && ruff check . --fix", help = "apply ruff linter" }
+pre_lint =  "echo '--------- Applying linters ---------'"
+lint = { cmd = "task black_lint && task ruff_lint && task format-xml", help = "apply linters" }
+post_lint = "echo '--------- Linters finished ---------'"
+
+tree = "uv tree > ./pip.tree"
+test = "coverage run -m pytest -s -x -v --junitxml='./.pytest_cache/test-result.xml'"
+post_test = "coverage report -m && coverage html"
+lint-xml = "find . -name '*.xml' -exec xmllint --noout {} \\;"
+format-xml = "echo '- Xmllint' && find . -name '*.xml' -exec sh -c 'xmllint --format --encode utf8 \"{}\" > \"{}.tmp\" && mv \"{}.tmp\" \"{}\"' \\;"
+lint-with-schema = "find . -name '*.xml' -exec xmllint --noout --schema schema.xsd {} \\;"
