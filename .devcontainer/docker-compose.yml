@@ -34,6 +34,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    ports:
+      - "5432:5432"
+    # networks:
+    #   - minha_rede      
 
   # Redis
   redis:
@@ -74,7 +78,9 @@ services:
         condition: service_healthy
     # command: ["n8n", "start"]
 
-
+# networks:
+#   minha_rede:
+#     driver: bridge
 
 #   # n8n Main (Primário)
 #   n8n-main:

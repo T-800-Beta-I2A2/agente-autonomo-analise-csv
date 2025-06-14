@@ -1,0 +1,416 @@
+{
+  "name": "I2A2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -580,
+        140
+      ],
+      "id": "7e0d7c70-cd04-47c0-bc04-82dd8ee930e4",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/T-800-Beta-I2A2/agente-autonomo-analise-csv/refs/heads/main/data/202401_NFs_Cabecalho.csv",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data_header"
+            }
+          },
+          "proxy": ""
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -280,
+        20
+      ],
+      "id": "c291a9cf-3ac4-4a35-bff9-890fb5928128",
+      "name": "HTTP Request",
+      "notesInFlow": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/T-800-Beta-I2A2/agente-autonomo-analise-csv/refs/heads/main/data/202401_NFs_Itens.csv",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data_item"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -280,
+        260
+      ],
+      "id": "04c9ec4a-6f47-4fc7-9bea-3eab9af2ed43",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "CHAVE",
+              "field2": "CHAVE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        480,
+        140
+      ],
+      "id": "a3e2eb8c-19b8-4a70-9910-320bb5a94bca",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "content": "## Cabeçario de NF",
+        "height": 220,
+        "width": 680
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -360,
+        -40
+      ],
+      "typeVersion": 1,
+      "id": "7ec41819-8245-4d99-91a9-523aba947708",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Items de NF",
+        "height": 220,
+        "width": 680
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -360,
+        200
+      ],
+      "typeVersion": 1,
+      "id": "3a86a458-2159-4972-afd7-0c0ab7e44133",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "```\n████████╗    █████╗  ██████╗  ██████╗ \n╚══██╔══╝   ██╔══██╗██╔═████╗██╔═████╗\n   ██║█████╗╚█████╔╝██║██╔██║██║██╔██║\n   ██║╚════╝██╔══██╗████╔╝██║████╔╝██║\n   ██║      ╚█████╔╝╚██████╔╝╚██████╔╝\n   ╚═╝       ╚════╝  ╚═════╝  ╚═════╝ \n                                      \n```",
+        "width": 400,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -840,
+        -100
+      ],
+      "typeVersion": 1,
+      "id": "71cda02b-8f1a-4451-b4d2-2441a0da9395",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "data_header",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        20
+      ],
+      "id": "877f7797-7154-4f9e-b66b-233d8572f319",
+      "name": "Extract from File1",
+      "alwaysOutputData": false,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "data_item",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        260
+      ],
+      "id": "ff5dbc68-5585-4ffe-8b66-1f8c66107408",
+      "name": "Extract from File2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c27d85c-ddb9-4a00-94be-b02e7c0b06ef",
+              "name": "CHAVE",
+              "value": "={{ $json['CHAVE DE ACESSO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "4a640049-e111-472d-aa56-1912b13d6243",
+              "name": "NUMERO_PRODUTO",
+              "value": "={{ $json['NÚMERO PRODUTO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "0bf62bd2-d252-49c0-a050-bbb59c0daa8e",
+              "name": "CODIGO_NCM_SH",
+              "value": "={{ $json['CÓDIGO NCM/SH'] }}",
+              "type": "string"
+            },
+            {
+              "id": "66127d12-e100-4afc-acf0-2bd167d13055",
+              "name": "NCM_SH_TIPO_DE_PRODUTO",
+              "value": "={{ $json['NCM/SH (TIPO DE PRODUTO)'] }}",
+              "type": "string"
+            },
+            {
+              "id": "4edee720-4d27-4f99-9ad5-f4640596fdb9",
+              "name": "CFOP",
+              "value": "={{ $json.CFOP }}",
+              "type": "string"
+            },
+            {
+              "id": "ed4aec4f-1101-4c2a-a670-b70d6f86ecc8",
+              "name": "QUANTIDADE",
+              "value": "={{ $json.QUANTIDADE }}",
+              "type": "string"
+            },
+            {
+              "id": "b1be16a9-0232-4095-835f-dd34b6da5975",
+              "name": "VALOR_UNITARIO",
+              "value": "={{ $json['VALOR UNITÁRIO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "2f814ef7-3672-43d7-98b4-16b36688ae8f",
+              "name": "VALOR_TOTAL",
+              "value": "={{ $json['VALOR TOTAL'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        200,
+        260
+      ],
+      "id": "205087ad-2f2c-4fcc-b6e3-2ed57aa75fc0",
+      "name": "Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f5c0627e-b1a4-45d2-99fa-a6008785e9fa",
+              "name": "CHAVE",
+              "value": "={{ $json['CHAVE DE ACESSO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ef4bc7de-6d68-4bde-81af-9cbb79c620cc",
+              "name": "NUMERO",
+              "value": "={{ $json['NÚMERO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "581767fb-aa5c-477a-8c95-d9826bd55783",
+              "name": "SERIE",
+              "value": "={{ $json['SÉRIE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "d62faff4-ddf8-4ca5-90dc-7f29041e4661",
+              "name": "NATUREZA_OPERACAO",
+              "value": "={{ $json['NATUREZA DA OPERAÇÃO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a7ca5b07-932b-4021-b4c7-75c39d82f544",
+              "name": "DATA_EMISSAO",
+              "value": "={{ $json['DATA EMISSÃO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "0f0fc9d5-b4a2-4cf0-beb9-e19297021024",
+              "name": "Emitente",
+              "value": "={{ $json['CPF/CNPJ Emitente'] }}",
+              "type": "string"
+            },
+            {
+              "id": "83e10c77-41cc-4b05-b437-fd7a9a1e658a",
+              "name": "RAZAO_SOCIAL_EMITENTE",
+              "value": "={{ $json['RAZÃO SOCIAL EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "3c19dd8f-10a4-403b-891c-cb580fb799eb",
+              "name": "UF_EMITENTE",
+              "value": "={{ $json['UF EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a312db33-9ea5-415f-b122-ca8e390e7263",
+              "name": "MUNICIPIO_EMITENTE",
+              "value": "={{ $json['MUNICÍPIO EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "32765c08-a0fb-4ccc-8719-6e111a3a8387",
+              "name": "CNPJ_DESTINATARIO",
+              "value": "={{ $json['CNPJ DESTINATÁRIO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "6c23043e-b478-4469-bc01-c102e9eb722d",
+              "name": "NOME_DESTINATARIO",
+              "value": "={{ $json['NOME DESTINATÁRIO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "d73ebe6e-28c5-45f1-9876-b58ef6a03ede",
+              "name": "UF_DESTINATARIO",
+              "value": "={{ $json['UF DESTINATÁRIO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "2fb84f28-a1c8-4e48-b205-602d1775a6ae",
+              "name": "VALOR_NOTA_FISCAL",
+              "value": "={{ $json['VALOR NOTA FISCAL'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        180,
+        20
+      ],
+      "id": "fd3de3cc-2814-47ec-b7f6-fb4b22c8c4fd",
+      "name": "Header"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Header",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Items": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Header": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "d9d48978-cdc2-43bc-94c6-ad880718ecb0",
+  "meta": {
+    "instanceId": "c74bc25c395ea0dd630d72723cb1527e088c6916f8ef8801fab67f9478d02a79"
+  },
+  "id": "tRfPqQnMBnIGbzcn",
+  "tags": []
+}
