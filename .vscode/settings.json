@@ -1,0 +1,7 @@
+{
+    // https://code.visualstudio.com/updates/v1_79#_copy-external-media-files-into-workspace-on-drop-or-paste-for-markdown
+    "markdown.copyFiles.overwriteBehavior": "nameIncrementally",
+    "markdown.copyFiles.destination": {
+        "**/*": "${documentDirName}/.attachments/"
+    }
+}
