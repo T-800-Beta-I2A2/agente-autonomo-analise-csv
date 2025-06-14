@@ -1,0 +1,41 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "I²A² Agente Autonomo Analise CSV",
+	// Caso usando um docker-compose
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "devcontainer_app",
+	"workspaceFolder": "/workspace",
+	"features": {
+		"ghcr.io/va-h/devcontainers-features/uv:1": {},
+		"ghcr.io/devcontainers-extra/features/terraform-asdf:2": {},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+	},
+	"mounts": [	
+		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
+		"source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind",
+	],
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [8080, 5678, 5432],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "uname -a",
+	"postCreateCommand": "chown -R vscode:vscode /workspace && uv sync",
+    
+	"remoteUser": "vscode",
+	"remoteEnv": {
+		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+	},	
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"hashicorp.terraform",
+				"bierner.markdown-mermaid",
+				"ms-python.debugpy",
+				"tamasfe.even-better-toml",
+				"GrapeCity.gc-excelviewer"
+			]
+		}
+	}
+}

@@ -1,0 +1,153 @@
+volumes:
+  db_storage:
+  n8n_storage:
+  redis_data:
+
+  
+services:
+  devcontainer_app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+    user: vscode
+
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=my_user
+      - POSTGRES_PASSWORD=my_pass
+      - POSTGRES_DB=n8n
+      # - POSTGRES_NON_ROOT_USER
+      # - POSTGRES_NON_ROOT_PASSWORD
+      - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
+    volumes:
+      - db_storage:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -h localhost -U my_user -d n8n']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Redis
+  redis:
+    image: redis:7
+    restart: always
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  n8n:
+    image: n8nio/n8n:latest
+    restart: always
+    # https://docs.n8n.io/hosting/configuration/environment-variables/
+    environment: 
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER=my_user
+      - DB_POSTGRESDB_PASSWORD=my_pass
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379      
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+    ports:
+      - 5678:5678
+    links:
+      - postgres
+      - redis
+    volumes:
+      - n8n_storage:/home/node/.n8n
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # command: ["n8n", "start"]
+
+
+
+#   # n8n Main (Primário)
+#   n8n-main:
+#     image: docker.n8n.io/n8nio/n8n:latest
+#     # name: n8n-main
+#     restart: always
+#     ports:
+#       - "5678:5678"
+#     environment:
+#       - N8N_HOST=${N8N_HOST:-0.0.0.0}
+#       - N8N_PORT=${N8N_PORT:-5678}
+#       - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+#       - NODE_ENV=production
+#       - EXECUTIONS_MODE=main
+#       - DB_TYPE=postgresdb
+#       - DB_POSTGRESDB_HOST=postgres
+#       - DB_POSTGRESDB_PORT=5432
+#       - DB_POSTGRESDB_DATABASE=n8n
+#       - DB_POSTGRESDB_USER=my_user
+#       - DB_POSTGRESDB_PASSWORD=my_pass
+#       - QUEUE_BULL_REDIS_HOST=redis
+#       - QUEUE_BULL_REDIS_PORT=6379
+#     volumes:
+#       - n8n_data:/home/node/.n8n
+#     depends_on:
+#       - postgres
+#       - redis
+#     command: ["n8n", "start"]
+
+#   # n8n Worker
+#   n8n-worker:
+#     image:  docker.n8n.io/n8nio/n8n:latest
+#     restart: always
+#     environment:
+#       - N8N_HOST=${N8N_HOST:-0.0.0.0}
+#       - N8N_PORT=${N8N_PORT:-5678}
+#       - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+#       - NODE_ENV=production
+#       - EXECUTIONS_MODE=queue
+#       - DB_TYPE=postgresdb
+#       - DB_POSTGRESDB_HOST=postgres
+#       - DB_POSTGRESDB_PORT=5432
+#       - DB_POSTGRESDB_DATABASE=n8n
+#       - DB_POSTGRESDB_USER=my_user
+#       - DB_POSTGRESDB_PASSWORD=my_pass
+#       - QUEUE_BULL_REDIS_HOST=redis
+#       - QUEUE_BULL_REDIS_PORT=6379
+#     volumes:
+#       - n8n_data:/home/node/.n8n
+#     depends_on:
+#       - n8n-main
+#       - postgres
+#       - redis
+#     # command: "n8n worker"
+
+#   # PostgreSQL
+#   postgres:
+#     image: postgres:15
+#     restart: always
+#     environment:
+#       - POSTGRES_USER=my_user
+#       - POSTGRES_PASSWORD=my_pass
+#       - POSTGRES_DB=n8n
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     ports:
+#       - "5432:5432"
+
+#   # Redis
+#   redis:
+#     image: redis:7
+#     restart: always
+#     volumes:
+#       - redis_data:/data
+#     ports:
+#       - "6379:6379"
+
+# volumes:
+#   n8n_data:
+#   postgres_data:
+#   redis_data:
