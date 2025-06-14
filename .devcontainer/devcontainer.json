@@ -34,7 +34,8 @@
 				"bierner.markdown-mermaid",
 				"ms-python.debugpy",
 				"tamasfe.even-better-toml",
-				"GrapeCity.gc-excelviewer"
+				"GrapeCity.gc-excelviewer",
+				"mechatroner.rainbow-csv"
 			]
 		}
 	}

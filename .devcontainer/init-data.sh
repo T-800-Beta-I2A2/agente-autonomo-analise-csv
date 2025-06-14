@@ -11,3 +11,13 @@ if [ -n "${POSTGRES_NON_ROOT_USER:-}" ] && [ -n "${POSTGRES_NON_ROOT_PASSWORD:-}
 else
 	echo "SETUP INFO: No Environment variables given!"
 fi
+
+INSERT INTO user (id, email, password, role, created_at, updated_at)
+VALUES (
+  gen_random_uuid(),
+  'admin@example.com',
+  '$2a$12$cl9V3lQB4V2sVAsxWnFyHuVW3fooGP0jW2h79XfRrh9gbKTZgHQFe',
+  'global:owner',
+  NOW(),
+  NOW()
+);

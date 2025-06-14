@@ -6,6 +6,7 @@ volumes:
   
 services:
   devcontainer_app:
+    container_name: I2A2_Agente_Autonomo_Analise_CSV
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
@@ -57,6 +58,10 @@ services:
       - QUEUE_BULL_REDIS_HOST=redis
       - QUEUE_BULL_REDIS_PORT=6379      
       - GENERIC_TIMEZONE=America/Sao_Paulo
+      - TZ=America/Sao_Paulo
+      - N8N_USER_MANAGEMENT_DISABLED=true
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_ENCRYPTION_KEY=0BFxtM6VopeCS4vRQtgI20NC57wP9VAK
     ports:
       - 5678:5678
     links:
