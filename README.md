@@ -20,3 +20,9 @@ source .venv/bin/activate
 
 ![alt text](.attachments/image.png)
 ![alt text](.attachments/image-1.png)
+
+
+## Referências de solução
+
+- [![Youtube](https://img.youtube.com/vi/-Ka4YKW7RwM/mqdefault.jpg)](https://youtu.be/-Ka4YKW7RwM)
+- [![Youtube](https://img.youtube.com/vi/uj_XpLSMRmk/mqdefault.jpg)](https://youtu.be/uj_XpLSMRmk)
