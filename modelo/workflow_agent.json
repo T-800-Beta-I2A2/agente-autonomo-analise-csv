@@ -1,0 +1,699 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/T-800-Beta-I2A2/agente-autonomo-analise-csv/refs/heads/main/data/202401_NFs_Cabecalho.csv",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data_header"
+            }
+          },
+          "proxy": ""
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1000,
+        240
+      ],
+      "id": "36c833f1-90e6-4778-8f51-02c42998139e",
+      "name": "HTTP Request",
+      "notesInFlow": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/T-800-Beta-I2A2/agente-autonomo-analise-csv/refs/heads/main/data/202401_NFs_Itens.csv",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data_item"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1000,
+        440
+      ],
+      "id": "979039ca-3bd1-4e02-9b40-cec23c0ea851",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "CHAVE",
+              "field2": "CHAVE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        -340,
+        340
+      ],
+      "id": "7ed88699-85a6-44ba-bcf6-97e496c6ce96",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "content": "## Cabeçario de NF",
+        "height": 220,
+        "width": 680
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1080,
+        180
+      ],
+      "typeVersion": 1,
+      "id": "cfc7e982-0226-4903-8bae-2eb5c2651746",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Items de NF",
+        "height": 220,
+        "width": 680
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1080,
+        380
+      ],
+      "typeVersion": 1,
+      "id": "75860a8a-0a67-46f5-b04c-39c46b28f2c1",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "```\n████████╗    █████╗  ██████╗  ██████╗ \n╚══██╔══╝   ██╔══██╗██╔═████╗██╔═████╗\n   ██║█████╗╚█████╔╝██║██╔██║██║██╔██║\n   ██║╚════╝██╔══██╗████╔╝██║████╔╝██║\n   ██║      ╚█████╔╝╚██████╔╝╚██████╔╝\n   ╚═╝       ╚════╝  ╚═════╝  ╚═════╝ \n                                      \n```",
+        "width": 400,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1480,
+        120
+      ],
+      "typeVersion": 1,
+      "id": "793b953f-7df7-4e27-a8d9-362ad17ac26f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "data_header",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        240
+      ],
+      "id": "5366db6f-5824-4b9e-bf0c-21d5ec3fc8ab",
+      "name": "Extract from File1",
+      "alwaysOutputData": false,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c27d85c-ddb9-4a00-94be-b02e7c0b06ef",
+              "name": "CHAVE",
+              "value": "={{ $json['CHAVE DE ACESSO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "4a640049-e111-472d-aa56-1912b13d6243",
+              "name": "NUMERO_PRODUTO",
+              "value": "={{ $json['NÚMERO PRODUTO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "0bf62bd2-d252-49c0-a050-bbb59c0daa8e",
+              "name": "CODIGO_NCM_SH",
+              "value": "={{ $json['CÓDIGO NCM/SH'] }}",
+              "type": "string"
+            },
+            {
+              "id": "66127d12-e100-4afc-acf0-2bd167d13055",
+              "name": "NCM_SH_TIPO_DE_PRODUTO",
+              "value": "={{ $json['NCM/SH (TIPO DE PRODUTO)'] }}",
+              "type": "string"
+            },
+            {
+              "id": "4edee720-4d27-4f99-9ad5-f4640596fdb9",
+              "name": "CFOP",
+              "value": "={{ $json.CFOP }}",
+              "type": "string"
+            },
+            {
+              "id": "ed4aec4f-1101-4c2a-a670-b70d6f86ecc8",
+              "name": "QUANTIDADE",
+              "value": "={{ $json.QUANTIDADE }}",
+              "type": "string"
+            },
+            {
+              "id": "b1be16a9-0232-4095-835f-dd34b6da5975",
+              "name": "VALOR_UNITARIO",
+              "value": "={{ $json['VALOR UNITÁRIO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "2f814ef7-3672-43d7-98b4-16b36688ae8f",
+              "name": "VALOR_TOTAL",
+              "value": "={{ $json['VALOR TOTAL'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -560,
+        440
+      ],
+      "id": "74ac6701-4cf7-490d-af61-804a4768b1f9",
+      "name": "Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f5c0627e-b1a4-45d2-99fa-a6008785e9fa",
+              "name": "CHAVE",
+              "value": "={{ $json['CHAVE DE ACESSO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ef4bc7de-6d68-4bde-81af-9cbb79c620cc",
+              "name": "NUMERO",
+              "value": "={{ $json['NÚMERO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "581767fb-aa5c-477a-8c95-d9826bd55783",
+              "name": "SERIE",
+              "value": "={{ $json['SÉRIE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "d62faff4-ddf8-4ca5-90dc-7f29041e4661",
+              "name": "NATUREZA_OPERACAO",
+              "value": "={{ $json['NATUREZA DA OPERAÇÃO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a7ca5b07-932b-4021-b4c7-75c39d82f544",
+              "name": "DATA_EMISSAO",
+              "value": "={{ $json['DATA EMISSÃO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "0f0fc9d5-b4a2-4cf0-beb9-e19297021024",
+              "name": "Emitente",
+              "value": "={{ $json['CPF/CNPJ Emitente'] }}",
+              "type": "string"
+            },
+            {
+              "id": "83e10c77-41cc-4b05-b437-fd7a9a1e658a",
+              "name": "RAZAO_SOCIAL_EMITENTE",
+              "value": "={{ $json['RAZÃO SOCIAL EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "3c19dd8f-10a4-403b-891c-cb580fb799eb",
+              "name": "UF_EMITENTE",
+              "value": "={{ $json['UF EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a312db33-9ea5-415f-b122-ca8e390e7263",
+              "name": "MUNICIPIO_EMITENTE",
+              "value": "={{ $json['MUNICÍPIO EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "32765c08-a0fb-4ccc-8719-6e111a3a8387",
+              "name": "CNPJ_DESTINATARIO",
+              "value": "={{ $json['CNPJ DESTINATÁRIO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "6c23043e-b478-4469-bc01-c102e9eb722d",
+              "name": "NOME_DESTINATARIO",
+              "value": "={{ $json['NOME DESTINATÁRIO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "d73ebe6e-28c5-45f1-9876-b58ef6a03ede",
+              "name": "UF_DESTINATARIO",
+              "value": "={{ $json['UF DESTINATÁRIO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "2fb84f28-a1c8-4e48-b205-602d1775a6ae",
+              "name": "VALOR_NOTA_FISCAL",
+              "value": "={{ $json['VALOR NOTA FISCAL'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -560,
+        240
+      ],
+      "id": "5893847f-6a02-4084-91cc-2bbd4b9db52c",
+      "name": "Header"
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/T-800-Beta-I2A2/agente-autonomo-analise-csv/refs/heads/main/data/Tabela_NCM.csv",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1000,
+        640
+      ],
+      "id": "c64af6e4-8e64-4cab-9c36-7d731447512e",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "delimiter": ",",
+          "fromLine": 5
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        640
+      ],
+      "id": "b9d11279-f9f3-4dcf-a5a9-60c61c7bfc74",
+      "name": "Extract from File",
+      "alwaysOutputData": false,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "data_item",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        440
+      ],
+      "id": "f9b28176-547f-4739-a784-e5b58762e5f4",
+      "name": "Extract from File2"
+    },
+    {
+      "parameters": {
+        "content": "## Codigo NCM",
+        "height": 180,
+        "width": 1260,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        620
+      ],
+      "id": "cee2c68a-b90e-4c9a-ac99-ab70add8d477",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\ngroup = {}\n\ndef get_level(code, descr):\n  codes = code.split(\".\")\n  if len(codes) <= 1:\n    return 0\n  else:\n    if descr.startswith('--'):\n      return 3\n    elif descr.startswith('-'):\n      return 2\n  return 1  \n\nparts = [None, None, None, None]\nfor item in _input.all():\n  descr = str(item.json['Descricao']).strip()\n  code = str(item.json.Codigo).strip()\n  level = get_level(code, descr)\n  item.json.level = level\n  \n  if level == 0:\n    parts = [descr, None, None, None]\n  elif level == 1:\n    parts[1] = descr\n    parts[2] = None\n    parts[3] = None\n  elif level == 2:\n    parts[2] = descr\n    parts[3] = None\n  else:\n    parts[3] = descr\n  \n  item.json.descricao_completa = \"|\".join([p.replace('-','').strip() for p in parts if p])\n  item.json.NCM = code.replace('.','')\n  \n\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -360,
+        640
+      ],
+      "id": "4660398d-325b-4c3d-b08b-971aa60f67f1",
+      "name": "Code | NCM + Decricao Completa"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2894c364-08d1-46ad-b430-50035d4c5b79",
+              "name": "Codigo",
+              "value": "={{ $json['Código'] }}",
+              "type": "string"
+            },
+            {
+              "id": "c89ef079-23f8-4fa0-8224-ad3213165dd0",
+              "name": "Descricao",
+              "value": "={{ $json['Descrição'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -560,
+        640
+      ],
+      "id": "ad2b9a15-aaa1-408f-993b-fc17cc52e708",
+      "name": "Edit Fields | NCM"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "504c59f2-e450-4f4a-b7e4-26977eb89ae8",
+              "name": "NCM",
+              "value": "={{ $json.NCM }}",
+              "type": "string"
+            },
+            {
+              "id": "b7f366ca-3ab7-4ddc-9bb6-c39004804079",
+              "name": "DECRICAO_NCM",
+              "value": "={{ $json.descricao_completa }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -160,
+        640
+      ],
+      "id": "9538b5eb-db50-446b-9882-8f8b69437fbd",
+      "name": "Edit Fields | NCM + Descr"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "CODIGO_NCM_SH",
+              "field2": "NCM"
+            }
+          ]
+        },
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        40,
+        360
+      ],
+      "id": "ca586f02-70d7-4f5c-a109-375c0e7d9a12",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1340,
+        440
+      ],
+      "id": "c84ebf77-f456-4bdd-8774-916bdda81d13",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "### 📌 Prompt PACEF – Análise Fiscal de NCM e Notas Fiscais com Saída JSON (Sem Campo de Alteração)\n\n---\n\n**🔎 Propósito (Purpose):**\nVocê é um analista fiscal especializado em revisão tributária de Notas Fiscais Eletrônicas (NF-e). Seu objetivo é identificar possíveis erros de classificação fiscal (principalmente no NCM), oportunidades de ajustes tributários ou sugestões de melhorias nos dados das notas.\n\n---\n\n**👥 Audiência (Audience):**\nO público-alvo são times de contabilidade, fiscal e compliance de empresas que emitem ou recebem notas fiscais.\n\n---\n\n**🌍 Contexto (Context):**\nVocê receberá como entrada um conjunto de dados de Notas Fiscais, contendo:\n\n* Chave de acesso da NF-e\n* Número da nota\n* Data de emissão\n* CNPJ do emitente\n* CNPJ do destinatário\n* Descrição do produto\n* NCM\n* CFOP\n* CST/CSOSN\n* Alíquotas (ICMS, IPI, PIS, COFINS)\n* Valores de produto e impostos\n\nO cenário é o sistema fiscal brasileiro (NF-e 4.0), considerando legislações estaduais e federais vigentes.\n\n---\n\n**✅ Expectativa (Expectation):**\nPara cada NF-e:\n\n* Avalie possíveis **erros de NCM**, **inconsistências fiscais**, **oportunidades de otimização tributária** ou **riscos de autuação**.\n\n* Resuma a **ação sugerida** em até **100 palavras**.\n\n* Para cada nota, retorne um **objeto JSON com apenas os campos:**\n\n* `\"chave\"`: chave de acesso da NF-e\n\n* `\"ação\"`: texto curto (até 100 palavras), descrevendo a recomendação ou alerta fiscal.\n\n---\n\n**📄 Formato (Format):**\n\nSua resposta **deve ser apenas um array JSON**, como no exemplo abaixo:\n\n[\n  {\n    \"chave\": \"35191234567890001234550010001234567890123456\",\n    \"ação\": \"NCM incorreto: 1234.56.78 não condiz com a descrição do produto. Recomenda-se alterar para 1234.56.79 para enquadramento correto e redução de risco fiscal.\"\n  },\n  {\n    \"chave\": \"35191234567890001234550010001234567890123457\",\n    \"ação\": \"CFOP utilizado é incompatível com a operação de venda interestadual. Recomenda-se revisão para evitar inconsistências em obrigações acessórias.\"\n  }\n]"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        320,
+        320
+      ],
+      "id": "b0fae4ab-e852-4b2a-ac52-26b439b979c0",
+      "name": "AI Agent",
+      "executeOnce": true,
+      "retryOnFail": false,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        260,
+        560
+      ],
+      "id": "fd539fe1-f084-4ca5-b37d-d141118d2ebe",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "Fg1Oa6uaFNxo04xo",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Header",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Items": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Header": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields | NCM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code | NCM + Decricao Completa": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields | NCM + Descr",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields | NCM": {
+      "main": [
+        [
+          {
+            "node": "Code | NCM + Decricao Completa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields | NCM + Descr": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ca770a26-bd41-4266-8851-3001498a5102",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c74bc25c395ea0dd630d72723cb1527e088c6916f8ef8801fab67f9478d02a79"
+  },
+  "id": "kr0o5QKxJef8jOYO",
+  "tags": []
+}
