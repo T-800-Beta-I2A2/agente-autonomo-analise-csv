@@ -16,6 +16,10 @@ services:
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
     user: vscode
+    depends_on:
+      - postgres
+      - redis
+      - n8n
 
   postgres:
     image: postgres:16
@@ -24,8 +28,6 @@ services:
       - POSTGRES_USER=my_user
       - POSTGRES_PASSWORD=my_pass
       - POSTGRES_DB=n8n
-      # - POSTGRES_NON_ROOT_USER
-      # - POSTGRES_NON_ROOT_PASSWORD
       - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
     volumes:
       - db_storage:/var/lib/postgresql/data
@@ -35,7 +37,7 @@ services:
       timeout: 5s
       retries: 10
     ports:
-      - "5432:5432"
+      - 5432:5432
     # networks:
     #   - minha_rede      
 
